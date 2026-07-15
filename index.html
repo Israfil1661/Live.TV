@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>M3U8 প্লেয়ার (ফুল স্ক্রিন)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- চ্যানেল লিস্ট -->
+    <div id="channelList">
+        <h2>📺 চ্যানেল নির্বাচন করুন</h2>
+        <div id="channelContainer"></div>
+    </div>
+
+    <!-- ভিডিও প্লেয়ার (প্রথমে লুকানো) -->
+    <div id="playerContainer" style="display:none;">
+        <video id="videoPlayer" playsinline preload="metadata"></video>
+        
+        <!-- নো-সিগন্যাল ওভারলে (ভিডিও লোড না হলে দেখাবে) -->
+        <div id="noSignalOverlay">
+            <div class="satellite-dish">
+                <div class="dish"></div>
+                <div class="stand"></div>
+                <div class="signal-wave"></div>
+            </div>
+            <div class="no-signal-text">📡 সংযোগ বিচ্ছিন্ন</div>
+            <div class="sub-text">স্যাটেলাইটের সাথে যোগাযোগ স্থাপন করা যাচ্ছে না</div>
+        </div>
+
+        <div id="loadingOverlay">⏳ লোড হচ্ছে...</div>
+        <div id="topBar">📺 <span id="channelName">চ্যানেল</span></div>
+        <div id="controls">
+            <button id="backBtn">← ফিরে</button>
+            <button id="playBtn">▶</button>
+            <button id="fullscreenBtn">⛶</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="script.js"></script>
+</body>
+</html>

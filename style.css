@@ -1,0 +1,286 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+}
+
+/* চ্যানেল লিস্ট */
+#channelList {
+    width: 100%;
+    height: 100%;
+    padding: 20px 16px 30px;
+    overflow-y: auto;
+    background: #121212;
+}
+#channelList h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #eee;
+    letter-spacing: 1px;
+}
+#channelContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.channel-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.06);
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.channel-item:active {
+    transform: scale(0.97);
+    background: rgba(255,255,255,0.12);
+}
+.channel-item img {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #222;
+    flex-shrink: 0;
+}
+.channel-item .info {
+    flex: 1;
+    min-width: 0;
+}
+.channel-item .name {
+    font-size: 17px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.channel-item .group {
+    font-size: 13px;
+    color: #aaa;
+}
+
+/* ---------- প্লেয়ার কন্টেইনার ---------- */
+#playerContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 1000;
+}
+#videoPlayer {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    object-fit: contain;
+}
+
+/* লোডিং ওভারলে */
+#loadingOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.7);
+    padding: 16px 30px;
+    border-radius: 40px;
+    font-size: 18px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.15);
+    pointer-events: none;
+    display: none;
+    z-index: 20;
+}
+
+/* ---------- নো-সিগন্যাল ওভারলে (নতুন) ---------- */
+#noSignalOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0e1a;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    text-align: center;
+    padding: 20px;
+}
+#noSignalOverlay.show {
+    display: flex;
+}
+/* ডিশ অ্যান্টেনা অ্যানিমেশন */
+.satellite-dish {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 30px;
+}
+.dish {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #c0c8d0, #4a5568);
+    border: 3px solid #718096;
+    position: absolute;
+    top: 0;
+    left: 10px;
+    transform-origin: center bottom;
+    animation: dish-sway 2.5s ease-in-out infinite;
+    box-shadow: 0 0 40px rgba(100, 150, 255, 0.2);
+}
+.dish::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, #cbd5e0 10%, #2d3748 80%);
+    border-radius: 50%;
+    border: 2px solid #a0aec0;
+}
+.stand {
+    width: 4px;
+    height: 50px;
+    background: #718096;
+    position: absolute;
+    bottom: -20px;
+    left: 58px;
+    transform: rotate(10deg);
+    transform-origin: bottom;
+}
+.signal-wave {
+    position: absolute;
+    top: 20px;
+    right: -30px;
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(100, 200, 255, 0.3);
+    border-radius: 50%;
+    animation: signal-ping 1.8s ease-out infinite;
+}
+.signal-wave::before,
+.signal-wave::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(100, 200, 255, 0.2);
+    border-radius: 50%;
+    animation: signal-ping 1.8s ease-out infinite;
+    animation-delay: 0.6s;
+}
+.signal-wave::after {
+    animation-delay: 1.2s;
+}
+@keyframes dish-sway {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
+}
+@keyframes signal-ping {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+.no-signal-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ff6b6b;
+    text-shadow: 0 0 20px rgba(255, 80, 80, 0.5);
+    animation: blink-text 1.4s step-end infinite;
+    letter-spacing: 2px;
+}
+.sub-text {
+    font-size: 16px;
+    color: #a0aec0;
+    margin-top: 10px;
+    opacity: 0.8;
+}
+@keyframes blink-text {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.15; }
+}
+
+/* উপরের বার ও কন্ট্রোল (আগের মতো) */
+#topBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 20px 40px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+    font-size: 18px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    text-shadow: 0 2px 8px #000;
+    z-index: 30;
+}
+#topBar.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+#controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 18px 25px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    z-index: 30;
+}
+#controls.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+#controls button {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: 0.15s;
+    flex-shrink: 0;
+    min-width: 50px;
+    text-align: center;
+}
+#controls button:active {
+    transform: scale(0.92);
+    background: rgba(255,255,255,0.25);
+}
+#backBtn {
+    background: rgba(255,70,70,0.25) !important;
+    border-color: rgba(255,70,70,0.4) !important;
+    font-size: 16px !important;
+}
+#playBtn { font-size: 22px; }
+#fullscreenBtn { font-size: 20px; }
